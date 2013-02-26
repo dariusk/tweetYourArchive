@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "twit": "0.1.5",
-    "express": "2.5.9",
+    "express": "3.1.0"
   },
   "version": "0.1.0",
   "engines": {

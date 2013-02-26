@@ -6,3 +6,5 @@ tweet_index.js
 tweets/
 user_details.js
 ```
+
+The `tweets` folder should contain a bunch of .js files.
