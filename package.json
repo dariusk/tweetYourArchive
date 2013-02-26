@@ -1,0 +1,14 @@
+{
+  "name": "tweetYourArchive",
+  "scripts": {
+    "start": "tweetYourArchive.js"
+  },
+  "dependencies": {
+    "twit": "0.1.5",
+    "express": "2.5.9",
+  },
+  "version": "0.1.0",
+  "engines": {
+    "node": "0.8.x"
+  }
+}
