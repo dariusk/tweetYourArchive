@@ -1,6 +1,7 @@
-var Grailbird = {};
-Grailbird.data = {};
+var Twit = require('twit');
+var ent = require('ent');
 
+// Read our list of available tweet source files
 var fs = require('fs');
 var tweetIndexFile = './tweets/tweet_index.js';
 
@@ -14,18 +15,16 @@ catch (e) {
 tweetIndexFileContent = tweetIndexFileContent.split(/.*=\s/)[1];
 var tweetIndex = JSON.parse(tweetIndexFileContent);
 
-var date = new Date();
+
+// Grab all of our tweets and put them in a big array
 var tweets = [];
 var tc = 0;
-
 for (var i=tweetIndex.length-1;i>=0;i--) {
   tweets.push(parseTweetFile(tweetIndex[i].file_name.replace('data/js','tweets')));
 }
 
-console.log(tweets.length);
-//console.log(tweets[58][0]);
-
-
+// traverse the array and put each tweet in a new array with just the info we need
+// (milliseconds between now and the tweet, and the text of the tweet)
 var tweetsMassaged = [];
 
 for (var i=0;i<tweets.length;i++) {
@@ -37,7 +36,6 @@ for (var i=0;i<tweets.length;i++) {
     });
   }
 }
-
 
 var tc = 24277;
 console.log(tweetsMassaged[tc]);
