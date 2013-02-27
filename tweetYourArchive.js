@@ -7,6 +7,7 @@ var ent = require('ent');
 // Read our list of available tweet source files
 var fs = require('fs');
 var tweetIndexFile = './tweets/tweet_index.js';
+var lastTweetFile = './lastTweet.log';
 
 try {
   var tweetIndexFileContent = fs.readFileSync(tweetIndexFile).toString();
@@ -40,15 +41,15 @@ for (var i=0;i<tweets.length;i++) {
   }
 }
 
-var tc = 24277;
-console.log(cleanTweet(tweetsMassaged[tc].text));
+var tc = 0;
+tweet(tweetsMassaged[tc].text);
 var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
 tc++;
 setNextTweet(timeToNextTweet);
 
 function setNextTweet(time) {
   setTimeout(function() {
-    console.log(cleanTweet(tweetsMassaged[tc].text));
+    tweet(tweetsMassaged[tc].text);
     var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
     tc++;
     setNextTweet(timeToNextTweet);
@@ -84,3 +85,16 @@ function cleanTweet(text) {
   text = text.substr(0,140);
   return text;
 }
+
+function tweet(text) {
+  T.post('statuses/update', {status: cleanTweet(text)}, function (err, reply) {
+    console.log(err, reply.text);
+    if (err === null) {
+      fs.writeFile(lastTweetFile, tc-1, function (err) {
+        if (err) throw err;
+        console.log('It\'s saved!');
+      });
+    }
+  });
+}
+
