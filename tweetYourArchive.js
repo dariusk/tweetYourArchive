@@ -15,18 +15,53 @@ tweetIndexFileContent = tweetIndexFileContent.split(/.*=\s/)[1];
 var tweetIndex = JSON.parse(tweetIndexFileContent);
 
 var date = new Date();
+var tweets = [];
+var tc = 0;
 
-var year = date.getFullYear()-5;
-var month = date.getMonth()+3;
-var day = date.getDate();
+for (var i=tweetIndex.length-1;i>=0;i--) {
+  tweets.push(parseTweetFile(tweetIndex[i].file_name.replace('data/js','tweets')));
+}
+
+console.log(tweets.length);
+//console.log(tweets[58][0]);
 
 
-console.log(getTweetFile(year, month, day));
-var tweets = parseTweetFile(getTweetFile(year, month, day));
+//var tweets = parseTweetFile(getTweetFile(year, month, day));
+var tweetsMassaged = [];
 
 for (var i=0;i<tweets.length;i++) {
-  var date = new Date(Date.parse(tweets[i].created_at));
-  console.log(date.getDate());
+  for (var j=tweets[i].length-1;j>=0;j--) {
+    var date = new Date(Date.parse(tweets[i][j].created_at));
+    tweetsMassaged.push({
+      text: tweets[i][j].text,
+      diff: Date.now()-date.getTime(),
+    });
+  }
+}
+
+/*
+for (var i=0;i<tweetsMassaged.length-1;i++) {
+  var timeToNextTweet = tweetsMassaged[i].diff-tweetsMassaged[i+1].diff;
+  if (timeToNextTweet < 60000) {
+    console.log(i, tweetsMassaged[i].diff-tweetsMassaged[i+1].diff);
+  }
+}
+*/
+
+var tc = 24277;
+
+console.log(tweetsMassaged[tc]);
+var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
+tc++;
+setNextTweet(timeToNextTweet);
+
+function setNextTweet(time) {
+  setTimeout(function() {
+    console.log(tweetsMassaged[tc]);
+    var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
+    tc++;
+    setNextTweet(timeToNextTweet);
+  }, time);
 }
 
 function getTweetFile(year, month, day) {
