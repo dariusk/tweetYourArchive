@@ -26,7 +26,6 @@ console.log(tweets.length);
 //console.log(tweets[58][0]);
 
 
-//var tweets = parseTweetFile(getTweetFile(year, month, day));
 var tweetsMassaged = [];
 
 for (var i=0;i<tweets.length;i++) {
@@ -39,17 +38,8 @@ for (var i=0;i<tweets.length;i++) {
   }
 }
 
-/*
-for (var i=0;i<tweetsMassaged.length-1;i++) {
-  var timeToNextTweet = tweetsMassaged[i].diff-tweetsMassaged[i+1].diff;
-  if (timeToNextTweet < 60000) {
-    console.log(i, tweetsMassaged[i].diff-tweetsMassaged[i+1].diff);
-  }
-}
-*/
 
 var tc = 24277;
-
 console.log(tweetsMassaged[tc]);
 var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
 tc++;
@@ -62,16 +52,6 @@ function setNextTweet(time) {
     tc++;
     setNextTweet(timeToNextTweet);
   }, time);
-}
-
-function getTweetFile(year, month, day) {
-  var result = "";
-  for (var i=0;i<tweetIndex.length;i++) {
-    if (tweetIndex[i].year === year && tweetIndex[i].month === month) {
-      result = tweetIndex[i].file_name;
-    }
-  }
-  return result.replace('data/js','tweets');
 }
 
 function parseTweetFile(fileName) {
