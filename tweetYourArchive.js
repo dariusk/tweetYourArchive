@@ -19,10 +19,20 @@ catch (e) {
 tweetIndexFileContent = tweetIndexFileContent.split(/.*=\s/)[1];
 var tweetIndex = JSON.parse(tweetIndexFileContent);
 
+var lastTweet;
 
+try {
+  lastTweet = parseInt(fs.readFileSync(lastTweetFile));
+}
+catch (e) {
+}
+if (lastTweet !== undefined) {
+  console.log("Found a last tweet, here's the number we're starting at:", lastTweet+1);
+}
 // Grab all of our tweets and put them in a big array
 var tweets = [];
-var tc = 0;
+var tc = lastTweet+1 || 0;
+console.log(tc);
 for (var i=tweetIndex.length-1;i>=0;i--) {
   tweets.push(parseTweetFile(tweetIndex[i].file_name.replace('data/js','tweets')));
 }
@@ -41,7 +51,6 @@ for (var i=0;i<tweets.length;i++) {
   }
 }
 
-var tc = 0;
 tweet(tweetsMassaged[tc].text);
 var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
 tc++;
@@ -88,7 +97,7 @@ function cleanTweet(text) {
 
 function tweet(text) {
   T.post('statuses/update', {status: cleanTweet(text)}, function (err, reply) {
-    console.log(err, reply.text);
+    console.log(err);
     if (err === null) {
       fs.writeFile(lastTweetFile, tc-1, function (err) {
         if (err) throw err;
