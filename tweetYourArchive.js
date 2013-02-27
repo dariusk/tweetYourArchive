@@ -1,4 +1,7 @@
 var Twit = require('twit');
+// Our twitter developer API info is in a file called 'config.js'
+var T = new Twit(require('./config.js'));
+
 var ent = require('ent');
 
 // Read our list of available tweet source files
@@ -38,14 +41,14 @@ for (var i=0;i<tweets.length;i++) {
 }
 
 var tc = 24277;
-console.log(tweetsMassaged[tc]);
+console.log(cleanTweet(tweetsMassaged[tc].text));
 var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
 tc++;
 setNextTweet(timeToNextTweet);
 
 function setNextTweet(time) {
   setTimeout(function() {
-    console.log(tweetsMassaged[tc]);
+    console.log(cleanTweet(tweetsMassaged[tc].text));
     var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
     tc++;
     setNextTweet(timeToNextTweet);
@@ -74,3 +77,10 @@ function parseTweetFile(fileName) {
   return result;
 }
 
+function cleanTweet(text) {
+  text = text.replace(/@/g,'.');
+  text = text.replace(/#/g,'*');
+  text = ent.decode(text);
+  text = text.substr(0,140);
+  return text;
+}
