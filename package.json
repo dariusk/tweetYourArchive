@@ -1,5 +1,6 @@
 {
   "name": "tweetYourArchive",
+  "subdomain": "oldsubversions",
   "scripts": {
     "start": "tweetYourArchive.js"
   },
