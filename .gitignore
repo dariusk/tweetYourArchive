@@ -1,6 +1,6 @@
-node_modules
-tweets/*
-!tweets
+node_modules/
+tweets/
+!tweets/Instructions.md
 
 lib-cov
 *.seed
