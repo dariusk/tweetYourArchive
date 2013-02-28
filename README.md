@@ -1,6 +1,6 @@
 # TweetYourArchive
 
-This will let you set up a bot that tweets your twitter archive, on a delay.
+This will let you set up a bot that tweets your twitter archive, on a delay. (Note: when it @replies or does a #hashtag, it replaces `@` with `.` and `#` with `*`. This is so it's a good Twitter citizen and doesn't spam people or pollute hashtags.)
 
 ## Adding your tweets
 
