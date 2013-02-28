@@ -1,3 +1,13 @@
+// We set up a web server on port 3000 using express.js because we're hosting on Nodejitsu. If you're
+// just running this on a server, or perhaps some non-Nodejitsu service, you can omit
+// all the code from here up to "-- End express"
+var app = require('express').createServer();
+app.get('/', function (req, res) {
+  res.send('Hi.');
+});
+app.listen(3000);
+// -- End express
+
 var Twit = require('twit');
 // Our twitter developer API info is in a file called 'config.js'
 var T = new Twit(require('./config.js'));
@@ -15,12 +25,11 @@ try {
 catch (e) {
   console.log(e);
 }
-
 tweetIndexFileContent = tweetIndexFileContent.split(/.*=\s/)[1];
 var tweetIndex = JSON.parse(tweetIndexFileContent);
 
+// Get our last logged tweet, if it exists.
 var lastTweet;
-
 try {
   lastTweet = parseInt(fs.readFileSync(lastTweetFile));
 }
@@ -29,6 +38,7 @@ catch (e) {
 if (lastTweet !== undefined) {
   console.log("Found a last tweet, here's the number we're starting at:", lastTweet+1);
 }
+
 // Grab all of our tweets and put them in a big array
 var tweets = [];
 var tc = lastTweet+1 || 0;
@@ -51,11 +61,18 @@ for (var i=0;i<tweets.length;i++) {
   }
 }
 
+// Tweet our first tweet
 tweet(tweetsMassaged[tc].text);
+
+// Figure out the delay to the next tweet
 var timeToNextTweet = tweetsMassaged[tc].diff-tweetsMassaged[tc+1].diff;
 tc++;
+
+// Set up the next tweet to fire off with the appropriate delay
 setNextTweet(timeToNextTweet);
 
+// Function that tweets after `time` milliseconds and advances the global tweet counter,
+// then calls itself so it goes forever.
 function setNextTweet(time) {
   setTimeout(function() {
     tweet(tweetsMassaged[tc].text);
@@ -87,6 +104,7 @@ function parseTweetFile(fileName) {
   return result;
 }
 
+// We don't want to spam twitter, so we replace @ with . and # with *.
 function cleanTweet(text) {
   text = text.replace(/@/g,'.');
   text = text.replace(/#/g,'*');
