@@ -5,7 +5,7 @@
     "start": "tweetYourArchive.js"
   },
   "dependencies": {
-    "twit": "0.1.5",
+    "twit": "1.1.6",
     "ent": "0.0.5",
     "express": "3.1.0"
   },
